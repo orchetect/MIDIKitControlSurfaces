@@ -7,10 +7,10 @@
 @_implementationOnly import SwiftRadix
 
 extension MIDI.HUI {
-	
+    
     /// HUI MIDI Message Parser
-	public class Parser {
-		
+    public class Parser {
+        
         // MARK: local state variables
         
         private var timeDisplay: [String] = []
@@ -53,8 +53,8 @@ extension MIDI.HUI {
             
         }
         
-	}
-	
+    }
+    
 }
 
 // MARK: ReceivesMIDIEvents
@@ -99,7 +99,7 @@ extension MIDI.HUI.Parser {
         // check for SysEx header
         guard data[safe: 0] == MIDI.HUI.kMIDI.kSysEx.kSubID1,
               data[safe: 1] == MIDI.HUI.kMIDI.kSysEx.kSubID2
-              else { return }
+        else { return }
         
         let dataAfterHeader = data
             .suffix(

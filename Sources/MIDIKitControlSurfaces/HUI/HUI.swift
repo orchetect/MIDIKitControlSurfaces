@@ -4,8 +4,8 @@
 //
 
 extension MIDI {
-	
-	/// Namespace for MIDIKit HUI protocol abstraction objects.
+    
+    /// Namespace for MIDIKit HUI protocol abstraction objects.
     ///
     /// HUI (Human User Interface) for Digital Audio Workstations
     ///
@@ -13,8 +13,8 @@ extension MIDI {
     ///
     /// References:
     /// - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
-	public enum HUI {
-		
-	}
-	
+    public enum HUI {
+        
+    }
+    
 }
