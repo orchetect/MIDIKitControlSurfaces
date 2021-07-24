@@ -62,8 +62,8 @@ extension MIDI.HUI.Surface {
         guard level.isContained(in: 0...16383) else { return }
         guard channel.isContained(in: 0x0...0x7) else { return }
         
-        let msb = level.bytePair.MSB.midiUInt7
-        let lsb = level.bytePair.LSB.midiUInt7
+        let msb = level.bytePair.msb.midiUInt7
+        let lsb = level.bytePair.lsb.midiUInt7
         let channelHi = channel.midiUInt7
         let channelLow = (channel + 0x20).midiUInt7
         

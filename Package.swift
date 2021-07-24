@@ -27,6 +27,7 @@ let package = Package(
             name: "MIDIKitControlSurfaces",
             dependencies: [
                 .product(name: "MIDIKit", package: "MIDIKit"),
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
             ]
         ),
 
