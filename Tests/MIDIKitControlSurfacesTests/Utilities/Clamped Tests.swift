@@ -6,7 +6,7 @@
 #if !os(watchOS)
 
 import XCTest
-@testable import MIDIKit
+@testable import MIDIKitControlSurfaces
 
 class Utilities_ClampedTests: XCTestCase {
     
