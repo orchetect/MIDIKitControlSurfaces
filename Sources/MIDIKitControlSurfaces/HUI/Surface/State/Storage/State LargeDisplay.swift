@@ -28,7 +28,7 @@ extension MIDI.HUI.Surface.State {
                     )
                     
                 case 9...:
-                    components = components.prefix(8).array
+                    components = Array(components.prefix(8))
                     
                 default:
                     break

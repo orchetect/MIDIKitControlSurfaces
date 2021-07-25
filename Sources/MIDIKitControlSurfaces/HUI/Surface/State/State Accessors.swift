@@ -4,7 +4,6 @@
 //
 
 import Foundation
-@_implementationOnly import OTCore
 
 extension MIDI.HUI.Surface.State: MIDIHUIStateProtocol {
     

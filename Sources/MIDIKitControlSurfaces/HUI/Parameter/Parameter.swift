@@ -321,7 +321,7 @@ extension MIDI.HUI.Parameter: MIDIHUIParameterProtocol {
         
         switch self {
         case .channelStrip(let channelStrip, let channelParameter):
-            return (channelStrip.uint8Exactly ?? 0, channelParameter.port)
+            return (UInt8(exactly: channelStrip) ?? 0, channelParameter.port)
 
         case .hotKey(let param):
             return param.zoneAndPort

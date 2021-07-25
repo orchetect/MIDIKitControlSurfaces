@@ -4,7 +4,6 @@
 //
 
 import Foundation
-@_implementationOnly import OTCore
 
 // MARK: - Main Update Method
 
@@ -100,7 +99,7 @@ extension MIDI.HUI.Surface.State {
         value: MIDI.UInt7
     ) -> MIDI.HUI.Surface.Event? {
         
-        guard channelStrip.isContained(in: 0...7)
+        guard (0...7).contains(channelStrip)
         else {
             Log.debug("HUI: VPot with channel \(channelStrip) not handled - needs coding. Probably a Large Display vPot?")
             return nil

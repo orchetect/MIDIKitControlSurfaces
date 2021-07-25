@@ -3,7 +3,6 @@
 //  MIDIKitControlSurfaces • https://github.com/orchetect/MIDIKitControlSurfaces
 //
 
-@_implementationOnly import OTCore
 @_implementationOnly import SwiftRadix
 
 extension MIDI.HUI {
@@ -96,9 +95,11 @@ extension MIDI.HUI.Parser {
     
     private func parse(sysExContent data: [MIDI.Byte]) {
         
+        guard data.count >= 2 else { return }
+        
         // check for SysEx header
-        guard data[safe: 0] == MIDI.HUI.kMIDI.kSysEx.kSubID1,
-              data[safe: 1] == MIDI.HUI.kMIDI.kSysEx.kSubID2
+        guard data[0] == MIDI.HUI.kMIDI.kSysEx.kSubID1,
+              data[1] == MIDI.HUI.kMIDI.kSysEx.kSubID2
         else { return }
         
         let dataAfterHeader = data
@@ -123,11 +124,11 @@ extension MIDI.HUI.Parser {
             var newString = ""
             
             for byte in dataAfterHeader[atOffsets: 2...5] {
-                newString += MIDI.HUI.kCharTables.smallDisplay[byte.int]
+                newString += MIDI.HUI.kCharTables.smallDisplay[Int(byte)]
             }
             
-            if channel.isContained(in: 0...7) {
-                huiEventHandler?(.channelName(channelStrip: channel.int, text: newString))
+            if (0...7).contains(channel) {
+                huiEventHandler?(.channelName(channelStrip: Int(channel), text: newString))
             } else if channel == 8 {
                 // ***** not storing local state yet - needs to be implemented
                 
@@ -144,6 +145,7 @@ extension MIDI.HUI.Parser {
             // it may be possible to receive multiple blocks in the same SysEx message (?), ie:
             // 0x12 zone [10 chars] zone [10 chars]
             // message length test: remove first byte (0x12), then see if remainder is divisible by 11
+            
             guard (dataAfterHeader.count - 1) % 11 == 0 else {
                 Log.debug("Received Large Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
                 return
@@ -152,12 +154,12 @@ extension MIDI.HUI.Parser {
             var largeDisplayData = dataAfterHeader[atOffsets: 1...dataAfterHeader.count-1]
             
             while largeDisplayData.count >= 11 {
-                let zone = largeDisplayData[atOffset: 0].int
+                let zone = Int(largeDisplayData[atOffset: 0])
                 var newString = ""
                 let letters = largeDisplayData[atOffsets: 1...10]
                 
                 for letter in letters {
-                    newString += MIDI.HUI.kCharTables.largeDisplay[letter.int] // ***** could get index overflow
+                    newString += MIDI.HUI.kCharTables.largeDisplay[Int(letter)]
                 }
                 largeDisplay[zone] = newString // update local state
                 
@@ -182,8 +184,7 @@ extension MIDI.HUI.Parser {
                     } else {
                         // not recognized
                         lookupChar = "?"
-                        Log.debug("Timecode character code not recognized:",
-                                  number.hex.stringValue, "(Int: \(number))")
+                        Log.debug("Timecode character code not recognized: \(number.hex.stringValue) (Int: \(number))")
                     }
                     
                     // update local state
@@ -196,8 +197,7 @@ extension MIDI.HUI.Parser {
             return
             
         default:
-            Log.debug("Header detected but subsequent message is not recognized:",
-                      dataAfterHeader.hex.stringValue(padToEvery: 2))
+            Log.debug("Header detected but subsequent message is not recognized: \(dataAfterHeader.hex.stringValue(padToEvery: 2))")
             
         }
         
@@ -207,11 +207,12 @@ extension MIDI.HUI.Parser {
         
         let data = event.rawBytes
         
-        guard data[safe: 0] == MIDI.HUI.kMIDI.kControlStatus else { return }
+        guard data.count >= 3 else { return }
         
-        guard let dataByte1 = data[safe: 1],
-              let dataByte2 = data[safe: 2]
-        else { return }
+        guard data[0] == MIDI.HUI.kMIDI.kControlStatus else { return }
+        
+        let dataByte1 = data[1]
+        let dataByte2 = data[2]
         
         // Control Segment
         
@@ -220,27 +221,27 @@ extension MIDI.HUI.Parser {
         case 0x00...0x07:
             // Channel Strip Fader level MSB
             
-            let channel = dataByte1.hex.nibble(0).value.int
+            let channel: Int = Int(dataByte1.hex.nibble(0).value)
             
             faderMSB[channel] = dataByte2
             
         case 0x20...0x27:
             // Channel Strip Fader level LSB
             
-            let channel = dataByte1.hex.nibble(0).value.int
+            let channel: Int = Int(dataByte1.hex.nibble(0).value)
             
-            let msb = faderMSB[channel].uint16 << 7
-            let lsb = dataByte2.uint16
+            let msb = UInt16(faderMSB[channel]) << 7
+            let lsb = UInt16(dataByte2)
             
-            guard let level = (msb + lsb).midiUInt14Exactly else { return }
+            guard let level = (msb + lsb).toMIDIUInt14Exactly else { return }
             
             huiEventHandler?(.faderLevel(channelStrip: channel, level: level))
             
         case 0x10...0x1B:
             // V-Pots
             
-            let channel = (dataByte1 % 0x10).int
-            let value = dataByte2.midiUInt7
+            let channel: Int = Int(dataByte1 % 0x10)
+            let value = dataByte2.toMIDIUInt7
             
             huiEventHandler?(.vPot(channelStrip: channel, value: value))
             
@@ -254,7 +255,7 @@ extension MIDI.HUI.Parser {
             
             defer { switchesZoneSelect = nil }
             
-            let port = dataByte2.hex.nibble(0).value.midiUInt4
+            let port = dataByte2.hex.nibble(0).value.toMIDIUInt4
             var state: Bool
             
             switch dataByte2.hex.nibble(1).value {
@@ -296,13 +297,14 @@ extension MIDI.HUI.Parser {
         
         let data = event.rawBytes
         
-        guard data[safe: 0] == MIDI.HUI.kMIDI.kLevelMetersStatus else { return }
+        guard data.count >= 3 else { return }
         
-        guard let dataByte1 = data[safe: 1],
-              let dataByte2 = data[safe: 2]
-        else { return }
+        guard data[ 0] == MIDI.HUI.kMIDI.kLevelMetersStatus else { return }
         
-        let channel = dataByte1.int
+        let dataByte1 = data[1]
+        let dataByte2 = data[2]
+        
+        let channel = Int(dataByte1)
         let sideAndValue = dataByte2 // encodes both side and value
         
         var side: MIDI.HUI.Surface.State.StereoLevelMeter.Side
@@ -310,10 +312,10 @@ extension MIDI.HUI.Parser {
         
         if sideAndValue >= 0x10 {
             side = .right // right
-            level = (sideAndValue % 0x10).int
+            level = Int(sideAndValue % 0x10)
         } else {
             side = .left // left
-            level = sideAndValue.int
+            level = Int(sideAndValue)
         }
         
         huiEventHandler?(.levelMeters(channelStrip: channel, side: side, level: level))

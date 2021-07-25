@@ -33,7 +33,7 @@ extension MIDI.HUI.Surface.State {
         public var left: Int = 0
         {
             didSet {
-                if !left.isContained(in: Self.levelRange) {
+                if !Self.levelRange.contains(left) {
                     left = left.clamped(to: Self.levelRange)
                 }
             }
@@ -43,7 +43,7 @@ extension MIDI.HUI.Surface.State {
         public var right: Int = 0
         {
             didSet {
-                if !right.isContained(in: Self.levelRange) {
+                if !Self.levelRange.contains(right) {
                     right = right.clamped(to: Self.levelRange)
                 }
             }

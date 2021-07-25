@@ -4,7 +4,6 @@
 //
 
 import Foundation
-@_implementationOnly import OTCore
 
 extension MIDI.HUI.Surface.State.ChannelStrip {
     
@@ -32,7 +31,7 @@ extension MIDI.HUI.Surface.State.ChannelStrip {
         
         /// Returns `.level` expressed as a unit interval between 0.0...1.0
         public var levelUnitInterval: Double {
-            level.value.double / Self.levelMax.double
+            Double(level.value) / Double(Self.levelMax)
         }
         
     }

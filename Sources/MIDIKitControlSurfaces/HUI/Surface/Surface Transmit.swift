@@ -4,7 +4,6 @@
 //
 
 import Foundation
-@_implementationOnly import OTCore
 
 extension MIDI.HUI.Surface {
     
@@ -26,14 +25,14 @@ extension MIDI.HUI.Surface {
                                  state: Bool) {
         
         // set on off byte
-        var portByte: MIDI.Byte = port.uint8
+        var portByte: MIDI.Byte = port.uInt8Value
         
         if state == true {
             portByte += 0x40
         }
         
-        let event1 = MIDI.Event.cc(controller: 0x0F, value: zone.midiUInt7, channel: 0)
-        let event2 = MIDI.Event.cc(controller: 0x2F, value: portByte.midiUInt7, channel: 0)
+        let event1 = MIDI.Event.cc(controller: 0x0F, value: zone.toMIDIUInt7, channel: 0)
+        let event2 = MIDI.Event.cc(controller: 0x2F, value: portByte.toMIDIUInt7, channel: 0)
         
         midiOut(event1)
         midiOut(event2)
@@ -59,13 +58,13 @@ extension MIDI.HUI.Surface {
     public func transmitFader(level: MIDI.UInt14,
                               channel: Int) {
         
-        guard level.isContained(in: 0...16383) else { return }
-        guard channel.isContained(in: 0x0...0x7) else { return }
+        guard (0...16383).contains(level) else { return }
+        guard (0x0...0x7).contains(channel) else { return }
         
-        let msb = level.bytePair.msb.midiUInt7
-        let lsb = level.bytePair.lsb.midiUInt7
-        let channelHi = channel.midiUInt7
-        let channelLow = (channel + 0x20).midiUInt7
+        let msb = level.bytePair.msb.toMIDIUInt7
+        let lsb = level.bytePair.lsb.toMIDIUInt7
+        let channelHi = channel.toMIDIUInt7
+        let channelLow = (channel + 0x20).toMIDIUInt7
         
         let event1 = MIDI.Event.cc(controller: channelHi, value: msb, channel: 0)
         let event2 = MIDI.Event.cc(controller: channelLow, value: lsb, channel: 0)
@@ -82,9 +81,9 @@ extension MIDI.HUI.Surface {
     public func transmitFader(isTouched: Bool,
                               channel: Int) {
         
-        guard channel.isContained(in: 0x0...0x7) else { return }
+        guard (0x0...0x7).contains(channel) else { return }
         
-        let event1 = MIDI.Event.cc(controller: 0x0F, value: channel.midiUInt7, channel: 0)
+        let event1 = MIDI.Event.cc(controller: 0x0F, value: channel.toMIDIUInt7, channel: 0)
         let event2 = MIDI.Event.cc(controller: 0x2F, value: isTouched ? 0x40 : 0x00, channel: 0)
         
         midiOut(event1)
