@@ -6,7 +6,7 @@ let package = Package(
     name: "MIDIKitControlSurfaces",
 
     platforms: [
-        .macOS(.v10_12), .iOS(.v10), .tvOS(.v14), .watchOS(.v7)
+        .macOS(.v10_12), .iOS(.v10), // , .tvOS(.v14), .watchOS(.v7) - still in beta
     ],
 
     products: [
