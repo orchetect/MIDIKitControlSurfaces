@@ -19,7 +19,7 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/orchetect/MIDIKit", .branch("dev")), // from: "0.1.6"),
-        .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1"),
+        .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.3"),
     ],
 
     targets: [
