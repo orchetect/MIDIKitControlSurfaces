@@ -115,7 +115,7 @@ extension MIDI.HUI.Parser {
             // 0x10 channel [4 chars]
             
             guard dataAfterHeader.count == 6 else {
-                Log.debug("Received Small Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
+                Logger.debug("Received Small Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
                 return
             }
             
@@ -135,7 +135,7 @@ extension MIDI.HUI.Parser {
                 // ***** should get folded into a master Select Assign callback
                 huiEventHandler?(.selectAssignText(text: newString))
             } else {
-                Log.debug("Small Display text message channel not expected: \(channel). Needs to be coded.")
+                Logger.debug("Small Display text message channel not expected: \(channel). Needs to be coded.")
             }
             
             return
@@ -147,7 +147,7 @@ extension MIDI.HUI.Parser {
             // message length test: remove first byte (0x12), then see if remainder is divisible by 11
             
             guard (dataAfterHeader.count - 1) % 11 == 0 else {
-                Log.debug("Received Large Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
+                Logger.debug("Received Large Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
                 return
             }
             
@@ -184,7 +184,7 @@ extension MIDI.HUI.Parser {
                     } else {
                         // not recognized
                         lookupChar = "?"
-                        Log.debug("Timecode character code not recognized: \(number.hex.stringValue) (Int: \(number))")
+                        Logger.debug("Timecode character code not recognized: \(number.hex.stringValue) (Int: \(number))")
                     }
                     
                     // update local state
@@ -197,7 +197,7 @@ extension MIDI.HUI.Parser {
             return
             
         default:
-            Log.debug("Header detected but subsequent message is not recognized: \(dataAfterHeader.hex.stringValue(padToEvery: 2))")
+            Logger.debug("Header detected but subsequent message is not recognized: \(dataAfterHeader.hex.stringValue(padToEvery: 2))")
             
         }
         
@@ -268,12 +268,12 @@ extension MIDI.HUI.Parser {
                     if let guess = MIDI.HUI.Parameter(zone: zone,
                                                       port: port)
                     {
-                        Log.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) matching \(guess) but has unexpected state bit \(dataByte2.hex.nibble(1).stringValue(prefix: true)). Ignoring message.")
+                        Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) matching \(guess) but has unexpected state bit \(dataByte2.hex.nibble(1).stringValue(prefix: true)). Ignoring message.")
                     } else {
-                        Log.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not guess zone and port pair name. Ignoring message.")
+                        Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not guess zone and port pair name. Ignoring message.")
                     }
                 } else {
-                    Log.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not lookup zone and port name because zone select message was not received prior. Ignoring message.")
+                    Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not lookup zone and port name because zone select message was not received prior. Ignoring message.")
                 }
                 
                 return
@@ -284,11 +284,11 @@ extension MIDI.HUI.Parser {
                 huiEventHandler?(.switch(zone: zone, port: port, state: state))
                 switchesZoneSelect = nil // reset zone select
             } else {
-                Log.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
+                Logger.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
             }
             
         default:
-            Log.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(dataByte1.hex.stringValue(padTo: 2, prefix: true)) in message: \(data.hex.stringValue(padTo: 2, prefix: true)).")
+            Logger.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(dataByte1.hex.stringValue(padTo: 2, prefix: true)) in message: \(data.hex.stringValue(padTo: 2, prefix: true)).")
         }
         
     }
