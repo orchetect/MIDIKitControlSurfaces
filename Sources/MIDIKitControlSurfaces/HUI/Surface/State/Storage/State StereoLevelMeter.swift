@@ -34,7 +34,7 @@ extension MIDI.HUI.Surface.State {
         {
             didSet {
                 if !Self.levelRange.contains(left) {
-                    left = left.clamped(to: Self.levelRange)
+                    left = left.otcClamped(to: Self.levelRange)
                 }
             }
         }
@@ -44,7 +44,7 @@ extension MIDI.HUI.Surface.State {
         {
             didSet {
                 if !Self.levelRange.contains(right) {
-                    right = right.clamped(to: Self.levelRange)
+                    right = right.otcClamped(to: Self.levelRange)
                 }
             }
         }
