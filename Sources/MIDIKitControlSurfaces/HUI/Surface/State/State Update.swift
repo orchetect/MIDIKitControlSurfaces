@@ -101,7 +101,7 @@ extension MIDI.HUI.Surface.State {
         
         guard (0...7).contains(channelStrip)
         else {
-            Log.debug("HUI: VPot with channel \(channelStrip) not handled - needs coding. Probably a Large Display vPot?")
+            Logger.debug("HUI: VPot with channel \(channelStrip) not handled - needs coding. Probably a Large Display vPot?")
             return nil
         }
         

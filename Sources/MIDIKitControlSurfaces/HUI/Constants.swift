@@ -20,7 +20,7 @@ extension MIDI.HUI {
             .noteOn(note: 0, velocity: 0x7F, channel: 0) // [0x90, 0x00, 0x7F]
         
         public static let kSystemResetMessage: MIDI.Event =
-            .systemReset // [0xFF]
+            .systemReset() // [0xFF]
         
         // [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
         public enum kSysEx {
