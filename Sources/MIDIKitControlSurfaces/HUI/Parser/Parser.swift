@@ -71,7 +71,7 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
         }
         
         switch event {
-        case .sysEx(manufacturer: let mfr, data: let bytes):
+        case .sysEx(manufacturer: let mfr, data: let bytes, group: _):
             guard mfr == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
             parse(sysExContent: bytes)
             
@@ -205,7 +205,7 @@ extension MIDI.HUI.Parser {
     
     private func parse(controlStatusMessage event: MIDI.Event) {
         
-        let data = event.rawBytes
+        let data = event.midi1RawBytes
         
         guard data.count >= 3 else { return }
         
@@ -295,7 +295,7 @@ extension MIDI.HUI.Parser {
     
     private func parse(levelMetersMessage event: MIDI.Event) {
         
-        let data = event.rawBytes
+        let data = event.midi1RawBytes
         
         guard data.count >= 3 else { return }
         
