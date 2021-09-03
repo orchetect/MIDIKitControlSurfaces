@@ -25,8 +25,8 @@ struct ContentView: View {
 
         huiSurface = MIDI.HUI.Surface()
 
-        huiSurface.huiEventHandler = { _ in
-            // Logger.debug(surfaceEvent)
+        huiSurface.huiEventHandler = { event in
+            // Logger.debug(event)
         }
 
         huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
