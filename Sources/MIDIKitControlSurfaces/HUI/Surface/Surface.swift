@@ -51,14 +51,14 @@ extension MIDI.HUI {
             parser = Parser()
             
             parser.huiEventHandler = { [weak self] event in
-                switch event {
-                case .pingReceived:
+                // send ping-reply if ping request is received
+                if case .pingReceived = event {
                     self?.transmitPing()
-                    
-                default:
-                    if let surfaceEvent = self?.state.updateState(receivedEvent: event) {
-                        self?.huiEventHandler?(surfaceEvent)
-                    }
+                }
+                
+                // process event
+                if let surfaceEvent = self?.state.updateState(receivedEvent: event) {
+                    self?.huiEventHandler?(surfaceEvent)
                 }
             }
             
