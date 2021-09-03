@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
 		E284EBB626AE018F0016AA0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB526AE018F0016AA0F /* AppDelegate.swift */; };
 		E284EBB826AE018F0016AA0F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB726AE018F0016AA0F /* ContentView.swift */; };
 		E284EBBA26AE01900016AA0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBB926AE01900016AA0F /* Assets.xcassets */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E21628E326E2DFF30022B66F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E284EBB226AE018F0016AA0F /* HUISurface.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUISurface.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E284EBB526AE018F0016AA0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E284EBB726AE018F0016AA0F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
 				E284EBCE26AE01F00016AA0F /* HUI Surface Views */,
 				E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */,
+				E21628E326E2DFF30022B66F /* Logger.swift */,
 				E284EBBE26AE01900016AA0F /* Main.storyboard */,
 				E284EBC126AE01900016AA0F /* Info.plist */,
 				E284EBB926AE01900016AA0F /* Assets.xcassets */,
@@ -197,6 +200,7 @@
 				E284EBB626AE018F0016AA0F /* AppDelegate.swift in Sources */,
 				E284EBD426AE01F00016AA0F /* TopView.swift in Sources */,
 				E284EBD326AE01F00016AA0F /* MixerView.swift in Sources */,
+				E21628E426E2DFF30022B66F /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
