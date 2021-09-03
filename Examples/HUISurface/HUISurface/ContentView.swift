@@ -16,7 +16,10 @@ struct ContentView: View {
     )
 
     @ObservedObject private var huiSurface: MIDI.HUI.Surface
-
+    
+    static let kHUIInputName = "MIDIKit HUI Input"
+    static let kHUIOutputName = "MIDIKit HUI Output"
+    
     init() {
         // set up HUI Surface object
 
@@ -28,7 +31,7 @@ struct ContentView: View {
 
         huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
             try? midiManager?
-                .managedOutputs["MIDIKit HUI Output"]?
+                .managedOutputs[Self.kHUIOutputName]?
                 .send(events: midiEvents)
         }
 
@@ -38,9 +41,9 @@ struct ContentView: View {
             try midiManager.start()
 
             try midiManager.addInput(
-                name: "MIDIKit HUI Input",
-                tag: "MIDIKit HUI Input",
-                uniqueID: .userDefaultsManaged(key: "MIDIKit HUI Input"),
+                name: Self.kHUIInputName,
+                tag: Self.kHUIInputName,
+                uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
                 receiveHandler: .events { [weak huiSurface] midiEvents in
                     // since handler callbacks from MIDI are on a CoreMIDI thread, parse the MIDI on the main thread because SwiftUI state in this app will be updated as a result
                     DispatchQueue.main.async {
@@ -50,9 +53,9 @@ struct ContentView: View {
             )
 
             try midiManager.addOutput(
-                name: "MIDIKit HUI Output",
-                tag: "MIDIKit HUI Output",
-                uniqueID: .userDefaultsManaged(key: "MIDIKit HUI Output")
+                name: Self.kHUIOutputName,
+                tag: Self.kHUIOutputName,
+                uniqueID: .userDefaultsManaged(key: Self.kHUIOutputName)
             )
         } catch {
             // Logger.error("Error setting up MIDI.")

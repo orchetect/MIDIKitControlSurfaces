@@ -71,6 +71,11 @@ extension MIDI.HUI.Surface.State {
         level: Int
     ) -> MIDI.HUI.Surface.Event? {
         
+        guard channelStrips.indices.contains(channelStrip) else {
+            Logger.debug("HUI: Level meter channel out of range: \(channelStrip)")
+            return nil
+        }
+        
         switch side {
         case .left: channelStrips[channelStrip].levelMeter.left = level
         case .right: channelStrips[channelStrip].levelMeter.right = level
@@ -88,6 +93,11 @@ extension MIDI.HUI.Surface.State {
         level: MIDI.UInt14
     ) -> MIDI.HUI.Surface.Event? {
         
+        guard channelStrips.indices.contains(channelStrip) else {
+            Logger.debug("HUI: Fader channel out of range: \(channelStrip)")
+            return nil
+        }
+        
         channelStrips[channelStrip].fader.level = level
         
         return .channelStrip(channel: channelStrip, component: .faderLevel(level))
@@ -99,8 +109,8 @@ extension MIDI.HUI.Surface.State {
         value: MIDI.UInt7
     ) -> MIDI.HUI.Surface.Event? {
         
-        guard (0...7).contains(channelStrip)
-        else {
+        guard channelStrips.indices.contains(channelStrip) else {
+            //Logger.debug("HUI: VPot channel out of range: \(channelStrip)")
             Logger.debug("HUI: VPot with channel \(channelStrip) not handled - needs coding. Probably a Large Display vPot?")
             return nil
         }
