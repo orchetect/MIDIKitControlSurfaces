@@ -4,6 +4,7 @@
 //
 
 @_implementationOnly import SwiftRadix
+import Darwin
 
 extension MIDI.HUI {
     
@@ -155,6 +156,7 @@ extension MIDI.HUI.Parser {
             
             while largeDisplayData.count >= 11 {
                 let zone = Int(largeDisplayData[atOffset: 0])
+                
                 var newString = ""
                 let letters = largeDisplayData[atOffsets: 1...10]
                 
@@ -253,8 +255,6 @@ extension MIDI.HUI.Parser {
         case MIDI.HUI.kMIDI.kControlDataByte1.portOnOffByte:
             // port on, or port off (2nd message)
             
-            defer { switchesZoneSelect = nil }
-            
             let port = dataByte2.hex.nibble(0).value.toMIDIUInt4
             var state: Bool
             
@@ -276,15 +276,18 @@ extension MIDI.HUI.Parser {
                     Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not lookup zone and port name because zone select message was not received prior. Ignoring message.")
                 }
                 
+                switchesZoneSelect = nil
                 return
                 
             }
             
             if let zone = switchesZoneSelect {
-                huiEventHandler?(.switch(zone: zone, port: port, state: state))
                 switchesZoneSelect = nil // reset zone select
+                huiEventHandler?(.switch(zone: zone, port: port, state: state))
             } else {
                 Logger.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
+                
+                switchesZoneSelect = nil
             }
             
         default:
