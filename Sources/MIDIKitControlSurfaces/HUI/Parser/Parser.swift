@@ -172,27 +172,25 @@ extension MIDI.HUI.Parser {
             return
             
         case MIDI.HUI.kMIDI.kDisplayType.timeDisplayByte:
-            guard dataAfterHeader.count > 0 else { return }
+            guard dataAfterHeader.count > 1 else { return }
             let tcData: [Int] = dataAfterHeader[atOffsets: 1...dataAfterHeader.count-1].map { Int($0) }
-            var i = 0
+            var timeDisplayIndex = 0
             
             for number in tcData {
-                if number != Int(MIDI.HUI.kMIDI.kSysExEndByte) { // kind of a lazy workaround but it works
-                    var lookupChar = ""
-                    
-                    if number < MIDI.HUI.kCharTables.timeDisplay.count {
-                        // in lookup table bounds
-                        lookupChar = MIDI.HUI.kCharTables.timeDisplay[number]
-                    } else {
-                        // not recognized
-                        lookupChar = "?"
-                        Logger.debug("Timecode character code not recognized: \(number.hex.stringValue) (Int: \(number))")
-                    }
-                    
-                    // update local state
-                    timeDisplay[7 - i] = lookupChar
-                    i += 1
+                var lookupChar = ""
+                
+                if number < MIDI.HUI.kCharTables.timeDisplay.count {
+                    // in lookup table bounds
+                    lookupChar = MIDI.HUI.kCharTables.timeDisplay[number]
+                } else {
+                    // not recognized
+                    lookupChar = "?"
+                    Logger.debug("Timecode character code not recognized: \(number.hex.stringValue) (Int: \(number))")
                 }
+                
+                // update local state
+                timeDisplay[7 - timeDisplayIndex] = lookupChar
+                timeDisplayIndex += 1
             }
             
             huiEventHandler?(.timeDisplayText(components: timeDisplay))
@@ -323,29 +321,6 @@ extension MIDI.HUI.Parser {
         
         huiEventHandler?(.levelMeters(channelStrip: channel, side: side, level: level))
         
-    }
-    
-}
-
-extension RandomAccessCollection {
-    
-    /// Utility
-    fileprivate func range(ofOffsets range: ClosedRange<Int>) -> ClosedRange<Index> {
-        let inIndex = index(startIndex, offsetBy: range.lowerBound)
-        let outIndex = index(startIndex, offsetBy: range.upperBound)
-        return inIndex...outIndex
-    }
-    
-    /// Utility
-    fileprivate subscript(atOffsets range: ClosedRange<Int>) -> Self.SubSequence {
-        let inIndex = index(startIndex, offsetBy: range.lowerBound)
-        let outIndex = index(startIndex, offsetBy: range.upperBound)
-        return self[inIndex...outIndex]
-    }
-    
-    /// Utility
-    fileprivate subscript(atOffset offset: Int) -> Element {
-        self[index(startIndex, offsetBy: offset)]
     }
     
 }
