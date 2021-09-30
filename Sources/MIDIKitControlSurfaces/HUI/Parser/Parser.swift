@@ -72,9 +72,9 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
         }
         
         switch event {
-        case .sysEx(manufacturer: let mfr, data: let bytes, group: _):
-            guard mfr == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
-            parse(sysExContent: bytes)
+        case .sysEx(let payload):
+            guard payload.manufacturer == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
+            parse(sysExContent: payload.data)
             
         case .cc:
             parse(controlStatusMessage: event)
