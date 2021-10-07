@@ -31,8 +31,8 @@ extension MIDI.HUI.Surface {
             portByte += 0x40
         }
         
-        let event1 = MIDI.Event.cc(controller: 0x0F, value: zone.toMIDIUInt7, channel: 0)
-        let event2 = MIDI.Event.cc(controller: 0x2F, value: portByte.toMIDIUInt7, channel: 0)
+        let event1 = MIDI.Event.cc(0x0F, value: .midi1(zone.toMIDIUInt7), channel: 0)
+        let event2 = MIDI.Event.cc(0x2F, value: .midi1(portByte.toMIDIUInt7), channel: 0)
         
         midiOut(event1)
         midiOut(event2)
@@ -66,8 +66,8 @@ extension MIDI.HUI.Surface {
         let channelHi = channel.toMIDIUInt7
         let channelLow = (channel + 0x20).toMIDIUInt7
         
-        let event1 = MIDI.Event.cc(controller: channelHi, value: msb, channel: 0)
-        let event2 = MIDI.Event.cc(controller: channelLow, value: lsb, channel: 0)
+        let event1 = MIDI.Event.cc(channelHi, value: .midi1(msb), channel: 0)
+        let event2 = MIDI.Event.cc(channelLow, value: .midi1(lsb), channel: 0)
         
         midiOut(event1)
         midiOut(event2)
@@ -83,8 +83,8 @@ extension MIDI.HUI.Surface {
         
         guard (0x0...0x7).contains(channel) else { return }
         
-        let event1 = MIDI.Event.cc(controller: 0x0F, value: channel.toMIDIUInt7, channel: 0)
-        let event2 = MIDI.Event.cc(controller: 0x2F, value: isTouched ? 0x40 : 0x00, channel: 0)
+        let event1 = MIDI.Event.cc(0x0F, value: .midi1(channel.toMIDIUInt7), channel: 0)
+        let event2 = MIDI.Event.cc(0x2F, value: .midi1(isTouched ? 0x40 : 0x00), channel: 0)
         
         midiOut(event1)
         midiOut(event2)
