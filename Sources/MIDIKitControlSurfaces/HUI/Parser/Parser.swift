@@ -79,7 +79,7 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
         case .cc:
             parse(controlStatusMessage: event)
             
-        case .polyAftertouch:
+        case .notePressure:
             parse(levelMetersMessage: event)
             
         default:
