@@ -25,7 +25,7 @@ extension MIDI.HUI {
         // [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
         public enum kSysEx {
             public static let kManufacturer: MIDI.Event.SysExManufacturer =
-                .threeByte(byte2: 0x00, byte3: 0x66)! // Mackie
+                .threeByte(byte2: 0x00, byte3: 0x66) // Mackie
             public static let kSubID1: MIDI.Byte = 0x05 // product ID?
             public static let kSubID2: MIDI.Byte = 0x00
         }
