@@ -61,18 +61,18 @@ struct ContentView: View {
             // Logger.error("Error setting up MIDI.")
         }
     }
-
+    
     var body: some View {
         HUISurfaceView()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity)
             .environmentObject(huiSurface)
     }
 }
 
 #if DEBUG
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView()
-        }
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
+}
 #endif
