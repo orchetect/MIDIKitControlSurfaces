@@ -7,18 +7,49 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-struct MomentaryButton: View {
+extension MomentaryButton {
+    fileprivate static let kDefaultWidth: CGFloat = 50
+    fileprivate static let kDefaultFontSize: CGFloat = 10
+}
+
+protocol MomentaryButtonProtocol {
+    var title: String { get }
+    var fontSize: CGFloat? { get set }
+    var width: CGFloat? { get set }
+}
+
+extension MomentaryButtonProtocol {
+    func fontSize(_ fontSize: CGFloat?) -> Self {
+        var copy = self
+        copy.fontSize = fontSize
+        return copy
+    }
+    
+    func width(_ width: CGFloat?) -> Self {
+        var copy = self
+        copy.width = width
+        return copy
+    }
+}
+
+struct MomentaryButton: View, MomentaryButtonProtocol {
     
     @State private var isPressed = false
-
+    
     let title: String
+    var fontSize: CGFloat?
+    var width: CGFloat?
+    var height: CGFloat?
     let pressedAction: () -> Void
     let releasedAction: () -> Void
-
+    
     var body: some View {
         ZStack {
             Text(title)
+                .font(.system(size: fontSize ?? Self.kDefaultFontSize))
+                .multilineTextAlignment(.center)
                 .padding(2)
+                .frame(width: width, height: height)
                 .background(isPressed ? Color.blue : Color.gray)
         }
         .highPriorityGesture(
@@ -39,51 +70,67 @@ struct MomentaryButton: View {
     
 }
 
-struct HUIButton: View {
+struct HUIButton: View, MomentaryButtonProtocol {
     
     @EnvironmentObject var huiSurface: MIDI.HUI.Surface
 
     let title: String
+    var fontSize: CGFloat?
+    var width: CGFloat?
     private let param: MIDI.HUI.Parameter.Wrapper
-
+    
     init(_ title: String = "",
-         _ param: MIDI.HUI.Parameter)
+         _ param: MIDI.HUI.Parameter,
+         width: CGFloat? = MomentaryButton.kDefaultWidth,
+         fontSize: CGFloat? = nil)
     {
         self.title = title
         self.param = .init(param)
+        self.width = width
+        self.fontSize = fontSize
     }
-
+    
     var body: some View {
-        MomentaryButton(title: title) {
+        MomentaryButton(title: title,
+                        fontSize: fontSize,
+                        width: width) {
             huiSurface.transmitSwitch(param.wrapped, state: true)
         } releasedAction: {
             huiSurface.transmitSwitch(param.wrapped, state: false)
         }
-        .font(.system(size: 10))
-        .foregroundColor(Color.black)
+        .foregroundColor(.black)
     }
     
 }
 
-struct HUIStateButton: View {
+struct HUIStateButton: View, MomentaryButtonProtocol  {
     
     @EnvironmentObject var huiSurface: MIDI.HUI.Surface
 
     let title: String
+    var fontSize: CGFloat?
+    var width: CGFloat?
     private let param: MIDI.HUI.Parameter.Wrapper
     let ledColor: Color
 
     init(_ title: String = "",
          _ param: MIDI.HUI.Parameter,
-         _ ledColor: HUISwitchColor)
+         _ ledColor: HUISwitchColor,
+         width: CGFloat? = MomentaryButton.kDefaultWidth,
+         fontSize: CGFloat? = nil)
     {
         self.title = title
+        self.fontSize = fontSize
+        self.width = width
         self.param = .init(param)
         self.ledColor = ledColor.color
     }
 
     var body: some View {
-        HUIButton(title, param.wrapped)
+        HUIButton(title,
+                  param.wrapped,
+                  width: width,
+                  fontSize: fontSize)
             .colorMultiply(
                 huiSurface.state.state(of: param.wrapped)
                     ? ledColor
@@ -111,12 +158,79 @@ extension HUIStateButton {
     
 }
 
-#if DEBUG
-    struct MomentaryButton_Previews: PreviewProvider {
-        static var previews: some View {
-            MomentaryButton(title: "BUTTON",
-                            pressedAction: {},
-                            releasedAction: {})
-        }
+struct HUINumPadButton: View, MomentaryButtonProtocol {
+    
+    @EnvironmentObject var huiSurface: MIDI.HUI.Surface
+    
+    static let kDefaultSize: CGFloat = 40
+    
+    let title: String
+    var fontSize: CGFloat?
+    var width: CGFloat?
+    var spacing: CGFloat?
+    let widthScale: CGFloat
+    let heightScale: CGFloat
+    private let param: MIDI.HUI.Parameter.Wrapper
+    
+    init(_ title: String = "",
+         _ param: MIDI.HUI.Parameter,
+         width: CGFloat? = kDefaultSize,
+         spacing: CGFloat? = nil,
+         widthScale: CGFloat = 1.0,
+         heightScale: CGFloat = 1.0,
+         fontSize: CGFloat? = 14)
+    {
+        self.title = title
+        self.param = .init(param)
+        self.width = width
+        self.spacing = spacing
+        self.widthScale = widthScale
+        self.heightScale = heightScale
+        self.fontSize = fontSize
     }
+    
+    var body: some View {
+        MomentaryButton(title: title,
+                        fontSize: fontSize,
+                        width: calculateWidth(),
+                        height: calculateHeight()) {
+            huiSurface.transmitSwitch(param.wrapped, state: true)
+        } releasedAction: {
+            huiSurface.transmitSwitch(param.wrapped, state: false)
+        }
+        .foregroundColor(.black)
+    }
+    
+    func calculateWidth() -> CGFloat? {
+        guard let width = width else { return nil }
+        return width * scaleFactor(size: width, baseScale: widthScale)
+    }
+    
+    func calculateHeight() -> CGFloat? {
+        // mirror width (square)
+        guard let height = width else { return nil }
+        return height * scaleFactor(size: height, baseScale: heightScale)
+    }
+    
+    func scaleFactor(size: CGFloat,
+                     baseScale: CGFloat) -> CGFloat {
+        if baseScale <= 1.0 { return baseScale }
+        guard let spacing = spacing else { return baseScale }
+        
+        let numberOfSpacers = floor(baseScale) - 1
+        let spacerFactor = numberOfSpacers * (spacing / size)
+        return baseScale + spacerFactor
+    }
+    
+}
+
+#if DEBUG
+struct MomentaryButton_Previews: PreviewProvider {
+    static var previews: some View {
+        MomentaryButton(title: "BUTTON",
+                        width: nil,
+                        pressedAction: {},
+                        releasedAction: {})
+    }
+}
 #endif

@@ -6,7 +6,7 @@ let package = Package(
     name: "MIDIKitControlSurfaces",
 
     platforms: [
-        .macOS(.v10_12), .iOS(.v10), // , .tvOS(.v14), .watchOS(.v7) - still in beta
+        .macOS(.v10_12), .iOS(.v10),
     ],
 
     products: [
@@ -18,7 +18,7 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/orchetect/MIDIKit", from: "0.2.1"),
+        .package(url: "https://github.com/orchetect/MIDIKit", from: "0.2.5"),
         .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.3"),
     ],
 
