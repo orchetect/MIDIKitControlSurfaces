@@ -58,10 +58,10 @@ extension MIDI.HUI.Parameter.TimeDisplay: CustomStringConvertible {
         
         // Zone 0x16
         // Timecode LEDs (no buttons, LEDs only)
-        case .timecode:  return ".timecode"
-        case .feet:      return ".feet"
-        case .beats:     return ".beats"
-        case .rudeSolo:  return ".rudeSolo"
+        case .timecode:  return "timecode"
+        case .feet:      return "feet"
+        case .beats:     return "beats"
+        case .rudeSolo:  return "rudeSolo"
         
         }
 

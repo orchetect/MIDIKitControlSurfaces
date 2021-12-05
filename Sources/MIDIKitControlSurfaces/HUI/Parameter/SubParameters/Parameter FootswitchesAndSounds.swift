@@ -47,10 +47,10 @@ extension MIDI.HUI.Parameter.FootswitchesAndSounds: CustomStringConvertible {
         
         // Zone 0x1D
         // Functions only - no LEDs or buttons
-        case .footswitchRelay1:  return ".footswitchRelay1"
-        case .footswitchRelay2:  return ".footswitchRelay2"
-        case .click:             return ".click"
-        case .beep:              return ".beep"
+        case .footswitchRelay1:  return "footswitchRelay1"
+        case .footswitchRelay2:  return "footswitchRelay2"
+        case .click:             return "click"
+        case .beep:              return "beep"
         
         }
 

@@ -53,14 +53,14 @@ extension MIDI.HUI.Parameter.ParameterEdit: CustomStringConvertible {
         
         switch self {
         
-        case .insertOrParam:  return ".insertOrParam"
-        case .assign:         return ".assign"
-        case .select1:        return ".select1"
-        case .select2:        return ".select2"
-        case .select3:        return ".select3"
-        case .select4:        return ".select4"
-        case .bypass:         return ".bypass"
-        case .compare:        return ".compare"
+        case .insertOrParam:  return "insertOrParam"
+        case .assign:         return "assign"
+        case .param1Select:   return "param1Select"
+        case .param2Select:   return "param2Select"
+        case .param3Select:   return "param3Select"
+        case .param4Select:   return "param4Select"
+        case .bypass:         return "bypass"
+        case .compare:        return "compare"
         
         }
 

@@ -54,13 +54,13 @@ extension MIDI.HUI.Parameter.Cursor: CustomStringConvertible {
         
         // Zone 0x0D
         // Cursor Movement / Mode / Scrub / Shuttle
-        case .down:     return ".down"
-        case .left:     return ".left"
-        case .mode:     return ".mode"
-        case .right:    return ".right"
-        case .up:       return ".up"
-        case .scrub:    return ".scrub"
-        case .shuttle:  return ".shuttle"
+        case .down:     return "down"
+        case .left:     return "left"
+        case .mode:     return "mode"
+        case .right:    return "right"
+        case .up:       return "up"
+        case .scrub:    return "scrub"
+        case .shuttle:  return "shuttle"
         
         }
 
