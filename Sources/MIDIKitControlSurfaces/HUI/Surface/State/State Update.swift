@@ -81,10 +81,8 @@ extension MIDI.HUI.Surface.State {
         case .right: channelStrips[channelStrip].levelMeter.right = level
         }
         
-        return .channelStrip(
-            channel: channelStrip,
-            component: .levelMeter(side: side, level: level)
-        )
+        return .channelStrip(channel: channelStrip,
+                             .levelMeter(side: side, level: level))
         
     }
     
@@ -100,7 +98,8 @@ extension MIDI.HUI.Surface.State {
         
         channelStrips[channelStrip].fader.level = level
         
-        return .channelStrip(channel: channelStrip, component: .faderLevel(level))
+        return .channelStrip(channel: channelStrip,
+                             .faderLevel(level))
         
     }
     
@@ -113,7 +112,8 @@ extension MIDI.HUI.Surface.State {
         case 0...7:
             channelStrips[vPotNumber].vPotLevel = value
             
-            return .channelStrip(channel: vPotNumber, component: .vPot(value))
+            return .channelStrip(channel: vPotNumber,
+                                 .vPot(value))
             
         case 8:
             return .paramEdit(.param1VPotLevel(value))
@@ -173,7 +173,8 @@ extension MIDI.HUI.Surface.State {
         
         channelStrips[channelStrip].nameTextDisplay = text
         
-        return .channelStrip(channel: channelStrip, component: .nameTextDisplay(text))
+        return .channelStrip(channel: channelStrip,
+                             .nameTextDisplay(text))
         
     }
     
@@ -198,21 +199,29 @@ extension MIDI.HUI.Surface.State {
         case .channelStrip(let channel, let channelParam):
             switch channelParam {
             case .recordReady:
-                return .channelStrip(channel: channel, component: .recordReady(state))
+                return .channelStrip(channel: channel,
+                                     .recordReady(state))
             case .insert:
-                return .channelStrip(channel: channel, component: .insert(state))
+                return .channelStrip(channel: channel,
+                                     .insert(state))
             case .vPotSelect:
-                return .channelStrip(channel: channel, component: .vPotSelect(state))
+                return .channelStrip(channel: channel,
+                                     .vPotSelect(state))
             case .auto:
-                return .channelStrip(channel: channel, component: .auto(state))
+                return .channelStrip(channel: channel,
+                                     .auto(state))
             case .solo:
-                return .channelStrip(channel: channel, component: .solo(state))
+                return .channelStrip(channel: channel,
+                                     .solo(state))
             case .mute:
-                return .channelStrip(channel: channel, component: .mute(state))
+                return .channelStrip(channel: channel,
+                                     .mute(state))
             case .select:
-                return .channelStrip(channel: channel, component: .select(state))
+                return .channelStrip(channel: channel,
+                                     .select(state))
             case .faderTouched:
-                return .channelStrip(channel: channel, component: .faderTouched(state))
+                return .channelStrip(channel: channel,
+                                     .faderTouched(state))
             }
             
         case .hotKey(let subParam):

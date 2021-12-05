@@ -39,7 +39,7 @@ extension MIDI.HUI.Surface {
         /// - `channel`: channel strip 0...7
         /// - `param`: enum describing what control was changed
         case channelStrip(channel: Int,
-                          component: ChannelStripComponent)
+                          ChannelStripComponent)
         
         // MARK: Switches
         
