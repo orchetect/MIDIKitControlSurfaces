@@ -31,7 +31,7 @@ extension MIDI.HUI.Surface.State {
             
         case .vPot(channelStrip: let channelStrip,
                    value: let value):
-            return updateState_VPot(channelStrip: channelStrip,
+            return updateState_VPot(vPotNumber: channelStrip,
                                     value: value)
             
         case .largeDisplayText(components: let components):
@@ -105,19 +105,29 @@ extension MIDI.HUI.Surface.State {
     }
     
     private mutating func updateState_VPot(
-        channelStrip: Int,
+        vPotNumber: Int,
         value: MIDI.UInt7
     ) -> MIDI.HUI.Surface.Event? {
         
-        guard channelStrips.indices.contains(channelStrip) else {
-            //Logger.debug("HUI: VPot channel out of range: \(channelStrip)")
-            Logger.debug("HUI: VPot with channel \(channelStrip) not handled - needs coding. Probably a Large Display vPot?")
+        switch vPotNumber {
+        case 0...7:
+            channelStrips[vPotNumber].vPotLevel = value
+            
+            return .channelStrip(channel: vPotNumber, component: .vPot(value))
+            
+        case 8:
+            return .paramEdit(.param1VPotLevel(value))
+        case 9:
+            return .paramEdit(.param2VPotLevel(value))
+        case 10:
+            return .paramEdit(.param3VPotLevel(value))
+        case 11:
+            return .paramEdit(.param4VPotLevel(value))
+            
+        default:
+            Logger.debug("HUI: VPot with index \(vPotNumber) not handled.")
             return nil
         }
-        
-        channelStrips[channelStrip].vPotLevel = value
-        
-        return .channelStrip(channel: channelStrip, component: .vPot(value))
         
     }
     
@@ -248,7 +258,24 @@ extension MIDI.HUI.Surface.State {
             return .functionKey(param: subParam, state: state)
             
         case .parameterEdit(let subParam):
-            return .paramEdit(param: subParam, state: state)
+            switch subParam {
+            case .assign:
+                return .paramEdit(.assign(state))
+            case .compare:
+                return .paramEdit(.compare(state))
+            case .bypass:
+                return .paramEdit(.bypass(state))
+            case .param1Select:
+                return .paramEdit(.param1Select(state))
+            case .param2Select:
+                return .paramEdit(.param2Select(state))
+            case .param3Select:
+                return .paramEdit(.param3Select(state))
+            case .param4Select:
+                return .paramEdit(.param4Select(state))
+            case .insertOrParam:
+                return .paramEdit(.insertOrParam(state))
+            }
             
         case .footswitchesAndSounds(let subParam):
             return .footswitchesAndSounds(param: subParam, state: state)

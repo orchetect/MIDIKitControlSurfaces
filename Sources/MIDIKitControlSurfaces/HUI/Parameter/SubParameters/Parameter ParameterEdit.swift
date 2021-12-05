@@ -13,10 +13,13 @@ extension MIDI.HUI.Parameter {
         case assign
         case compare
         case bypass
-        case select1
-        case select2
-        case select3
-        case select4
+        case param1Select
+        case param2Select
+        case param3Select
+        case param4Select
+        
+        // note: four vPots are not switches, they are handled elsewhere
+        
         /// Toggle: Insert (off) / Param (on)
         case insertOrParam
         
@@ -32,10 +35,10 @@ extension MIDI.HUI.Parameter.ParameterEdit: MIDIHUIParameterProtocol {
         switch self {
         case .insertOrParam:  return (0x1C, 0x0)
         case .assign:         return (0x1C, 0x1)
-        case .select1:        return (0x1C, 0x2)
-        case .select2:        return (0x1C, 0x3)
-        case .select3:        return (0x1C, 0x4)
-        case .select4:        return (0x1C, 0x5)
+        case .param1Select:   return (0x1C, 0x2)
+        case .param2Select:   return (0x1C, 0x3)
+        case .param3Select:   return (0x1C, 0x4)
+        case .param4Select:   return (0x1C, 0x5)
         case .bypass:         return (0x1C, 0x6)
         case .compare:        return (0x1C, 0x7)
         }

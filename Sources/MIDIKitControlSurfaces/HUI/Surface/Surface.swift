@@ -59,6 +59,8 @@ extension MIDI.HUI {
                 // process event
                 if let surfaceEvent = self?.state.updateState(receivedEvent: event) {
                     self?.huiEventHandler?(surfaceEvent)
+                } else {
+                    Logger.debug("Unhandled HUI event: \(event)")
                 }
             }
             

@@ -45,7 +45,7 @@ extension MIDI.HUI.Surface {
         
         case hotKey(param: MIDI.HUI.Parameter.HotKey, state: Bool)
         
-        case paramEdit(param: MIDI.HUI.Parameter.ParameterEdit, state: Bool)
+        case paramEdit(ParamEditComponent)
         
         case functionKey(param: MIDI.HUI.Parameter.FunctionKey, state: Bool)
         

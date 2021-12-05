@@ -13,10 +13,18 @@ extension MIDI.HUI.Surface.State {
         public var assign = false
         public var compare = false
         public var bypass = false
-        public var select1 = false
-        public var select2 = false
-        public var select3 = false
-        public var select4 = false
+        
+        public var param1Select = false
+        public var param1VPotLevel: MIDI.UInt7 = 0
+        
+        public var param2Select = false
+        public var param2VPotLevel: MIDI.UInt7 = 0
+        
+        public var param3Select = false
+        public var param3VPotLevel: MIDI.UInt7 = 0
+        
+        public var param4Select = false
+        public var param4VPotLevel: MIDI.UInt7 = 0
         
         /// Toggle: Insert (off) / Param (on)
         public var insertOrParam = false
@@ -35,10 +43,10 @@ extension MIDI.HUI.Surface.State.ParameterEdit: MIDIHUIStateProtocol {
         case .assign:         return assign
         case .compare:        return compare
         case .bypass:         return bypass
-        case .select1:        return select1
-        case .select2:        return select2
-        case .select3:        return select3
-        case .select4:        return select4
+        case .param1Select:   return param1Select
+        case .param2Select:   return param2Select
+        case .param3Select:   return param3Select
+        case .param4Select:   return param4Select
         case .insertOrParam:  return insertOrParam
         }
         
@@ -50,10 +58,10 @@ extension MIDI.HUI.Surface.State.ParameterEdit: MIDIHUIStateProtocol {
         case .assign:         assign = state
         case .compare:        compare = state
         case .bypass:         bypass = state
-        case .select1:        select1 = state
-        case .select2:        select2 = state
-        case .select3:        select3 = state
-        case .select4:        select4 = state
+        case .param1Select:   param1Select = state
+        case .param2Select:   param2Select = state
+        case .param3Select:   param3Select = state
+        case .param4Select:   param4Select = state
         case .insertOrParam:  insertOrParam = state
         }
         

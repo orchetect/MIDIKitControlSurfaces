@@ -30,9 +30,18 @@ struct ContentView: View {
         }
 
         huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
-            try? midiManager?
-                .managedOutputs[Self.kHUIOutputName]?
-                .send(events: midiEvents)
+            guard let output = midiManager?
+                    .managedOutputs[Self.kHUIOutputName]
+            else {
+                Logger.debug("MIDI output missing.")
+                return
+            }
+            
+            do {
+                try output.send(events: midiEvents)
+            } catch {
+                Logger.debug(error.localizedDescription)
+            }
         }
 
         // set up MIDI ports
@@ -44,7 +53,8 @@ struct ContentView: View {
                 name: Self.kHUIInputName,
                 tag: Self.kHUIInputName,
                 uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
-                receiveHandler: .events { [weak huiSurface] midiEvents in
+                receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
+                { [weak huiSurface] midiEvents in
                     // since handler callbacks from MIDI are on a CoreMIDI thread, parse the MIDI on the main thread because SwiftUI state in this app will be updated as a result
                     DispatchQueue.main.async {
                         huiSurface?.midiIn(events: midiEvents)
