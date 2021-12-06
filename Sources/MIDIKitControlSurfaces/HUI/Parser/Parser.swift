@@ -244,10 +244,10 @@ extension MIDI.HUI.Parser {
         case 0x10...0x1B:
             // V-Pots
             
-            let channel: Int = Int(dataByte1 % 0x10)
+            let number: Int = Int(dataByte1 % 0x10)
             let value = dataByte2.toMIDIUInt7
             
-            huiEventHandler?(.vPot(channelStrip: channel,
+            huiEventHandler?(.vPot(number: number,
                                    value: value))
             
         case MIDI.HUI.kMIDI.kControlDataByte1.zoneSelectByte:

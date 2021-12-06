@@ -17,7 +17,7 @@ extension MIDI.HUI.Parser {
         case faderLevel(channelStrip: Int,
                         level: MIDI.UInt14)
         
-        case vPot(channelStrip: Int,
+        case vPot(number: Int,
                   value: MIDI.UInt7)
         
         case largeDisplayText(components: [String])
@@ -55,9 +55,9 @@ extension MIDI.HUI.Parser.Event: CustomStringConvertible {
                          level: let level):
             return "faderLevel(channelStrip: \(channelStrip), level: \(level))"
             
-        case .vPot(channelStrip: let channelStrip,
+        case .vPot(number: let channelStrip,
                    value: let value):
-            return "vPot(channelStrip: \(channelStrip), value: \(value))"
+            return "vPot(number: \(channelStrip), value: \(value))"
             
         case .largeDisplayText(components: let components):
             return "largeDisplayText(components: \(components))"

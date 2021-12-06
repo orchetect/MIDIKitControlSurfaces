@@ -29,9 +29,9 @@ extension MIDI.HUI.Surface.State {
             return updateState_FaderLevel(channelStrip: channelStrip,
                                           level: level)
             
-        case .vPot(channelStrip: let channelStrip,
+        case .vPot(number: let number,
                    value: let value):
-            return updateState_VPot(vPotNumber: channelStrip,
+            return updateState_VPot(number: number,
                                     value: value)
             
         case .largeDisplayText(components: let components):
@@ -104,15 +104,15 @@ extension MIDI.HUI.Surface.State {
     }
     
     private mutating func updateState_VPot(
-        vPotNumber: Int,
+        number: Int,
         value: MIDI.UInt7
     ) -> MIDI.HUI.Surface.Event? {
         
-        switch vPotNumber {
+        switch number {
         case 0...7:
-            channelStrips[vPotNumber].vPotLevel = value
+            channelStrips[number].vPotLevel = value
             
-            return .channelStrip(channel: vPotNumber,
+            return .channelStrip(channel: number,
                                  .vPot(value))
             
         case 8:
@@ -125,7 +125,7 @@ extension MIDI.HUI.Surface.State {
             return .paramEdit(.param4VPotLevel(value))
             
         default:
-            Logger.debug("HUI: VPot with index \(vPotNumber) not handled.")
+            Logger.debug("HUI: VPot with index \(number) not handled.")
             return nil
         }
         
