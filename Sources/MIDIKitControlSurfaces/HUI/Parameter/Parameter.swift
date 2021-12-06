@@ -442,8 +442,7 @@ extension MIDI.HUI.Parameter {
     /// Construct from a HUI zone and port pair.
     /// Returns `nil` if the pair is undefined.
     public init?(zone: MIDI.Byte,
-                 port: MIDI.UInt4)
-    {
+                 port: MIDI.UInt4) {
         
         guard let parameter = MIDI.HUI.Parameter.allCases
                 .first(where: {
