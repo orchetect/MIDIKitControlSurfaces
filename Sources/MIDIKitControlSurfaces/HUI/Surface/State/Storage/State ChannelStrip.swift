@@ -37,7 +37,9 @@ extension MIDI.HUI.Surface.State {
             didSet {
                 if nameTextDisplay.count != 4 {
                     // trims or pads string to always be exactly 4 characters wide
-                    nameTextDisplay = nameTextDisplay.padding(toLength: 4, withPad: " ", startingAt: 0)
+                    nameTextDisplay = nameTextDisplay.padding(toLength: 4,
+                                                              withPad: " ",
+                                                              startingAt: 0)
                 }
             }
         }

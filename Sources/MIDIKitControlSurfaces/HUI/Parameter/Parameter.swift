@@ -296,10 +296,10 @@ extension MIDI.HUI.Parameter: CaseIterable {
         // Parameter Edit  (Section at top right below the Large Display readout)
         .parameterEdit(.insertOrParam),
         .parameterEdit(.assign),
-        .parameterEdit(.select1),
-        .parameterEdit(.select2),
-        .parameterEdit(.select3),
-        .parameterEdit(.select4),
+        .parameterEdit(.param1Select),
+        .parameterEdit(.param2Select),
+        .parameterEdit(.param3Select),
+        .parameterEdit(.param4Select),
         .parameterEdit(.bypass),
         .parameterEdit(.compare),
         
@@ -382,55 +382,55 @@ extension MIDI.HUI.Parameter: CustomStringConvertible {
         
         switch self {
         case .channelStrip(let channelStrip, let channelParameter):
-            return ".channelStrip(\(channelStrip), \(channelParameter))"
+            return "channelStrip(\(channelStrip), \(channelParameter))"
 
         case .hotKey(let param):
-            return ".hotKey(\(param))"
+            return "hotKey(\(param))"
 
         case .window(let param):
-            return ".window(\(param))"
+            return "window(\(param))"
 
         case .bankMove(let param):
-            return ".bankMove(\(param))"
+            return "bankMove(\(param))"
 
         case .assign(let param):
-            return ".assign(\(param))"
+            return "assign(\(param))"
 
         case .cursor(let param):
-            return ".cursor(\(param))"
+            return "cursor(\(param))"
 
         case .transport(let param):
-            return ".transport(\(param))"
+            return "transport(\(param))"
 
         case .controlRoom(let param):
-            return ".controlRoom(\(param))"
+            return "controlRoom(\(param))"
 
         case .numPad(let param):
-            return ".numPad(\(param))"
+            return "numPad(\(param))"
 
         case .timeDisplay(let param):
-            return ".timeDisplay(\(param))"
+            return "timeDisplay(\(param))"
 
         case .autoEnable(let param):
-            return ".autoEnable(\(param))"
+            return "autoEnable(\(param))"
 
         case .autoMode(let param):
-            return ".autoMode(\(param))"
+            return "autoMode(\(param))"
 
         case .statusAndGroup(let param):
-            return ".statusAndGroup(\(param))"
+            return "statusAndGroup(\(param))"
 
         case .edit(let param):
-            return ".edit(\(param))"
+            return "edit(\(param))"
 
         case .functionKey(let param):
-            return ".functionKey(\(param))"
+            return "functionKey(\(param))"
 
         case .parameterEdit(let param):
-            return ".parameterEdit(\(param))"
+            return "parameterEdit(\(param))"
 
         case .footswitchesAndSounds(let param):
-            return ".footswitchesAndSounds(\(param))"
+            return "footswitchesAndSounds(\(param))"
         }
         
     }
@@ -442,11 +442,11 @@ extension MIDI.HUI.Parameter {
     /// Construct from a HUI zone and port pair.
     /// Returns `nil` if the pair is undefined.
     public init?(zone: MIDI.Byte,
-                 port: MIDI.UInt4)
-    {
+                 port: MIDI.UInt4) {
         
         guard let parameter = MIDI.HUI.Parameter.allCases
-                .first(where: { $0.zoneAndPort.zone == zone
+                .first(where: {
+                    $0.zoneAndPort.zone == zone
                     && $0.zoneAndPort.port == port
                 })
         else { return nil }

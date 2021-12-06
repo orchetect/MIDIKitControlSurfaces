@@ -33,9 +33,9 @@ extension HUISurfaceView {
                     // Param 1
                     VStack {
                         HUIStateButton("SELECT",
-                                       .parameterEdit(.select1),
+                                       .parameterEdit(.param1Select),
                                        .green)
-                        RotaryKnob(size: 40)
+                        RotaryKnob(size: 40) // .parameterEdit(.param1VPot)
                     }
                     .frame(width: 75)
                     
@@ -44,9 +44,9 @@ extension HUISurfaceView {
                     // Param 2
                     VStack {
                         HUIStateButton("SELECT",
-                                       .parameterEdit(.select2),
+                                       .parameterEdit(.param2Select),
                                        .green)
-                        RotaryKnob(size: 40)
+                        RotaryKnob(size: 40) // .parameterEdit(.param2VPot)
                     }
                     .frame(width: 75)
                     
@@ -55,9 +55,9 @@ extension HUISurfaceView {
                     // Param 3
                     VStack {
                         HUIStateButton("SELECT",
-                                       .parameterEdit(.select3),
+                                       .parameterEdit(.param3Select),
                                        .green)
-                        RotaryKnob(size: 40)
+                        RotaryKnob(size: 40) // .parameterEdit(.param3VPot)
                     }
                     .frame(width: 75)
                     
@@ -66,9 +66,9 @@ extension HUISurfaceView {
                     // Param 4
                     VStack {
                         HUIStateButton("SELECT",
-                                       .parameterEdit(.select4),
+                                       .parameterEdit(.param4Select),
                                        .green)
-                        RotaryKnob(size: 40)
+                        RotaryKnob(size: 40) // .parameterEdit(.param4VPot)
                     }
                     .frame(width: 75)
                     

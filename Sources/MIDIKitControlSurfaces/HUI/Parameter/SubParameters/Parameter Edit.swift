@@ -51,12 +51,12 @@ extension MIDI.HUI.Parameter.Edit: CustomStringConvertible {
         
         // Zone 0x1A
         // Edit (To the right of the channel strips)
-        case .paste:     return ".paste"
-        case .cut:       return ".cut"
-        case .capture:   return ".capture"
-        case .delete:    return ".delete"
-        case .copy:      return ".copy"
-        case .separate:  return ".separate"
+        case .paste:     return "paste"
+        case .cut:       return "cut"
+        case .capture:   return "capture"
+        case .delete:    return "delete"
+        case .copy:      return "copy"
+        case .separate:  return "separate"
         
         }
 

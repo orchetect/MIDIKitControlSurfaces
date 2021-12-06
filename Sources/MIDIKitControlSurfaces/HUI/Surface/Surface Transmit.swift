@@ -21,7 +21,7 @@ extension MIDI.HUI.Surface {
     ///   - port: HUI port number
     ///   - state: State of switch or action
     internal func transmitSwitch(zone: MIDI.Byte,
-                                 port:  MIDI.UInt4,
+                                 port: MIDI.UInt4,
                                  state: Bool) {
         
         // set on off byte
@@ -34,8 +34,7 @@ extension MIDI.HUI.Surface {
         let event1 = MIDI.Event.cc(0x0F, value: .midi1(zone.toMIDIUInt7), channel: 0)
         let event2 = MIDI.Event.cc(0x2F, value: .midi1(portByte.toMIDIUInt7), channel: 0)
         
-        midiOut(event1)
-        midiOut(event2)
+        midiOut([event1, event2])
         
     }
     
@@ -69,8 +68,7 @@ extension MIDI.HUI.Surface {
         let event1 = MIDI.Event.cc(channelHi, value: .midi1(msb), channel: 0)
         let event2 = MIDI.Event.cc(channelLow, value: .midi1(lsb), channel: 0)
         
-        midiOut(event1)
-        midiOut(event2)
+        midiOut([event1, event2])
         
     }
     
@@ -86,8 +84,7 @@ extension MIDI.HUI.Surface {
         let event1 = MIDI.Event.cc(0x0F, value: .midi1(channel.toMIDIUInt7), channel: 0)
         let event2 = MIDI.Event.cc(0x2F, value: .midi1(isTouched ? 0x40 : 0x00), channel: 0)
         
-        midiOut(event1)
-        midiOut(event2)
+        midiOut([event1, event2])
         
     }
     

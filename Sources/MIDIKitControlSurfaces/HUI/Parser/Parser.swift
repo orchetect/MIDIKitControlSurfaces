@@ -41,7 +41,8 @@ extension MIDI.HUI {
             
             timeDisplay = [String](repeating: " ", count: 8)
             
-            largeDisplay = [String](repeating: MIDI.HUI.Surface.State.LargeDisplay.defaultStringComponent, count: 8)
+            largeDisplay = [String](repeating: Surface.State.LargeDisplay.defaultStringComponent,
+                                    count: 8)
             
             // HUI protocol (and the HUI hardware control surface) has only 8 channel faders.
             // Even though some control surface models have a 9th master fader
@@ -83,7 +84,7 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
             parse(levelMetersMessage: event)
             
         default:
-            break
+            Logger.debug("Unhandled MIDI event received: \(event)")
         }
         
     }
@@ -129,7 +130,8 @@ extension MIDI.HUI.Parser {
             }
             
             if (0...7).contains(channel) {
-                huiEventHandler?(.channelName(channelStrip: Int(channel), text: newString))
+                huiEventHandler?(.channelName(channelStrip: Int(channel),
+                                              text: newString))
             } else if channel == 8 {
                 // ***** not storing local state yet - needs to be implemented
                 
@@ -197,7 +199,9 @@ extension MIDI.HUI.Parser {
             return
             
         default:
-            Logger.debug("Header detected but subsequent message is not recognized: \(dataAfterHeader.hex.stringValue(padToEvery: 2))")
+            let msg = dataAfterHeader.hex.stringValue(padToEvery: 2)
+            
+            Logger.debug("Header detected but subsequent message is not recognized: \(msg)")
             
         }
         
@@ -215,7 +219,6 @@ extension MIDI.HUI.Parser {
         let dataByte2 = data[2]
         
         // Control Segment
-        
         
         switch dataByte1 {
         case 0x00...0x07:
@@ -235,18 +238,26 @@ extension MIDI.HUI.Parser {
             
             guard let level = (msb + lsb).toMIDIUInt14Exactly else { return }
             
-            huiEventHandler?(.faderLevel(channelStrip: channel, level: level))
+            huiEventHandler?(.faderLevel(channelStrip: channel,
+                                         level: level))
             
         case 0x10...0x1B:
             // V-Pots
             
-            let channel: Int = Int(dataByte1 % 0x10)
+            let number: Int = Int(dataByte1 % 0x10)
             let value = dataByte2.toMIDIUInt7
             
-            huiEventHandler?(.vPot(channelStrip: channel, value: value))
+            huiEventHandler?(.vPot(number: number,
+                                   value: value))
             
         case MIDI.HUI.kMIDI.kControlDataByte1.zoneSelectByte:
             // zone select (1st message)
+            
+            if let zs = switchesZoneSelect {
+                let newZS = dataByte2.hex.stringValue(padTo: 2, prefix: true)
+                let oldZS = zs.hex.stringValue(padTo: 2, prefix: true)
+                Logger.debug("Received new switch zone select \(newZS), but zone select buffer was not empty. (\(oldZS) was stored)). Storing new zone select.")
+            }
             
             switchesZoneSelect = dataByte2
             
@@ -259,19 +270,30 @@ extension MIDI.HUI.Parser {
             switch dataByte2.hex.nibble(1).value {
             case 0x0:
                 state = false
+                
+            case 0x2:
+                // Not sure what this is used for. Any of the HUI docs available don't mention it being used. However, Pro Tools transmits switch messages that utilize this sate nibble. It's been observed being transmit when changing a track's automation mode to Read, and one message per track is sent when opening a Pro Tools session.
+                Logger.debug("Received (switch cmd msg 2/2) with unhandled state nibble 0x2. Ignoring.")
+                switchesZoneSelect = nil
+                return
+                
             case 0x4:
                 state = true
+                
             default:
+                let cmd = data.hex.stringValue(padTo: 2, prefix: true)
+                let stateNibble = dataByte2.hex.nibble(1).stringValue(prefix: true)
+                
                 if let zone = switchesZoneSelect {
                     if let guess = MIDI.HUI.Parameter(zone: zone,
                                                       port: port)
                     {
-                        Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) matching \(guess) but has unexpected state bit \(dataByte2.hex.nibble(1).stringValue(prefix: true)). Ignoring message.")
+                        Logger.debug("Received \(cmd) (switch cmd msg 2/2) matching \(guess) but has unexpected state nibble \(stateNibble). Ignoring message.")
                     } else {
-                        Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not guess zone and port pair name. Ignoring message.")
+                        Logger.debug("Received \(cmd) (switch cmd msg 2/2) but has unexpected state nibble \(stateNibble). Additionally, could not guess zone and port pair name. Ignoring message.")
                     }
                 } else {
-                    Logger.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) but has unexpected state bit (\(dataByte2.hex.nibble(1).stringValue(prefix: true))). Additionally, could not lookup zone and port name because zone select message was not received prior. Ignoring message.")
+                    Logger.debug("Received \(cmd) (switch cmd msg 2/2) but has unexpected state nibble \(stateNibble). Additionally, could not lookup zone and port name because zone select message was not received prior. Ignoring message.")
                 }
                 
                 switchesZoneSelect = nil
@@ -283,13 +305,18 @@ extension MIDI.HUI.Parser {
                 switchesZoneSelect = nil // reset zone select
                 huiEventHandler?(.switch(zone: zone, port: port, state: state))
             } else {
-                Logger.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
+                let cmd = data.hex.stringValue(padTo: 2, prefix: true)
+                
+                Logger.debug("Received message 2 of a switch command (\(cmd) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
                 
                 switchesZoneSelect = nil
             }
             
         default:
-            Logger.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(dataByte1.hex.stringValue(padTo: 2, prefix: true)) in message: \(data.hex.stringValue(padTo: 2, prefix: true)).")
+            let b1 = dataByte1.hex.stringValue(padTo: 2, prefix: true)
+            let msg = data.hex.stringValue(padTo: 2, prefix: true)
+            
+            Logger.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(b1) in message: \(msg).")
         }
         
     }
@@ -319,7 +346,9 @@ extension MIDI.HUI.Parser {
             level = Int(sideAndValue)
         }
         
-        huiEventHandler?(.levelMeters(channelStrip: channel, side: side, level: level))
+        huiEventHandler?(.levelMeters(channelStrip: channel,
+                                      side: side,
+                                      level: level))
         
     }
     

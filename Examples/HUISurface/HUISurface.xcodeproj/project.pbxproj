@@ -130,7 +130,6 @@
 				E284EBDB26AE03C20016AA0F /* MIDIKitControlSurfaces */,
 				E284EBB426AE018F0016AA0F /* HUISurface */,
 				E284EBB326AE018F0016AA0F /* Products */,
-				E284EBDD26AE03D00016AA0F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,13 +187,6 @@
 				E283F09F274101A80037F199 /* RightSideView */,
 			);
 			path = HUISurfaceView;
-			sourceTree = "<group>";
-		};
-		E284EBDD26AE03D00016AA0F /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -51,12 +51,12 @@ extension MIDI.HUI.Parameter.AutoMode: CustomStringConvertible {
         
         // Zone 0x18
         // Auto Mode (To the right of the channel strips)
-        case .trim:   return ".trim"
-        case .latch:  return ".latch"
-        case .read:   return ".read"
-        case .off:    return ".off"
-        case .write:  return ".write"
-        case .touch:  return ".touch"
+        case .trim:   return "trim"
+        case .latch:  return "latch"
+        case .read:   return "read"
+        case .off:    return "off"
+        case .write:  return "write"
+        case .touch:  return "touch"
         
         }
 

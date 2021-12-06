@@ -49,12 +49,12 @@ extension MIDI.HUI.Parameter.AutoEnable: CustomStringConvertible {
         
         switch self {
         
-        case .plugin:    return ".plugin"
-        case .pan:       return ".pan"
-        case .fader:     return ".fader"
-        case .sendMute:  return ".sendMute"
-        case .send:      return ".send"
-        case .mute:      return ".mute"
+        case .plugin:    return "plugin"
+        case .pan:       return "pan"
+        case .fader:     return "fader"
+        case .sendMute:  return "sendMute"
+        case .send:      return "send"
+        case .mute:      return "mute"
         
         }
 

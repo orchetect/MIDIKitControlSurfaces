@@ -77,8 +77,8 @@ extension MIDI.HUI.Surface.State.StereoLevelMeter {
         public var description: String {
             
             switch self {
-            case .left: return ".left"
-            case .right: return ".right"
+            case .left: return "left"
+            case .right: return "right"
             }
             
         }

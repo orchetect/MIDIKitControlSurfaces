@@ -39,13 +39,13 @@ extension MIDI.HUI.Surface {
         /// - `channel`: channel strip 0...7
         /// - `param`: enum describing what control was changed
         case channelStrip(channel: Int,
-                          component: ChannelStripComponent)
+                          ChannelStripComponent)
         
         // MARK: Switches
         
         case hotKey(param: MIDI.HUI.Parameter.HotKey, state: Bool)
         
-        case paramEdit(param: MIDI.HUI.Parameter.ParameterEdit, state: Bool)
+        case paramEdit(ParamEditComponent)
         
         case functionKey(param: MIDI.HUI.Parameter.FunctionKey, state: Bool)
         

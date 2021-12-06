@@ -12,12 +12,14 @@ extension MIDI.HUI {
         // MARK: System messages
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
+        // [0x90, 0x00, 0x00]
         public static let kPingFromHostMessage: MIDI.Event =
-            .noteOn(0, velocity: .midi1(0), channel: 0) // [0x90, 0x00, 0x00]
+            .noteOn(0, velocity: .midi1(0), channel: 0, midi1ZeroVelocityAsNoteOff: false)
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
+        // [0x90, 0x00, 0x7F]
         public static let kPingReplyToHostMessage: MIDI.Event =
-            .noteOn(0, velocity: .midi1(0x7F), channel: 0) // [0x90, 0x00, 0x7F]
+            .noteOn(0, velocity: .midi1(0x7F), channel: 0)
         
         public static let kSystemResetMessage: MIDI.Event =
             .systemReset() // [0xFF]
@@ -32,26 +34,26 @@ extension MIDI.HUI {
         
         public enum kDisplayType {
             /// 4-character channel name displays, and Select-Assign displays
-            public static let smallByte:           MIDI.Byte   = 0x10
+            public static let smallByte: MIDI.Byte = 0x10
             /// Main time display (can be switched between modes, such as timecode, bars/beats, etc.)
-            public static let timeDisplayByte:     MIDI.Byte   = 0x11
+            public static let timeDisplayByte: MIDI.Byte = 0x11
             /// Main 40x2 character display
-            public static let largeByte:           MIDI.Byte   = 0x12
+            public static let largeByte: MIDI.Byte = 0x12
         }
         
         // Status 0xA is normally MIDI poly aftertouch, but HUI hijacks it.
-        public static let kLevelMetersStatus:      MIDI.Byte   = 0xA0
+        public static let kLevelMetersStatus: MIDI.Byte = 0xA0
         
         // MARK: Control events
         
         // Status 0xB is normally channel voice control change, but HUI hijacks it.
         // HUI only ever uses first channel, so the status byte will always be exactly 0xB0.
         // HUI also uses running status for back-to-back 0xB status messages.
-        public static let kControlStatus:          MIDI.Byte   = 0xB0
+        public static let kControlStatus: MIDI.Byte = 0xB0
         
         public enum kControlDataByte1 {
-            public static let zoneSelectByte:      MIDI.Byte   = 0x0C
-            public static let portOnOffByte:       MIDI.Byte   = 0x2C
+            public static let zoneSelectByte: MIDI.Byte = 0x0C
+            public static let portOnOffByte: MIDI.Byte = 0x2C
         }
         
         public enum kChannelStripElement: MIDI.UInt4, Equatable, Hashable {
@@ -67,8 +69,8 @@ extension MIDI.HUI {
             
         }
         
-        public static let kSysExStartByte:         MIDI.Byte   = 0xF0
-        public static let kSysExEndByte:           MIDI.Byte   = 0xF7
+        public static let kSysExStartByte: MIDI.Byte = 0xF0
+        public static let kSysExEndByte: MIDI.Byte = 0xF7
         
     }
     

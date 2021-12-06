@@ -50,7 +50,7 @@ extension MIDI.HUI.Parameter.ChannelParameter: MIDIHUIParameterProtocol {
         
         // note: zone (channel number) will be provided when accessed from `MIDI.HUI.Parameter.zoneAndPort`
         
-        // this method is only here to fulfil the MIDIHUIParameterProtocol protocol requirement, it's not actually used (and should not actually be used)
+        // this method is only here to fulfill the MIDIHUIParameterProtocol protocol requirement, it's not actually used (and should not actually be used)
         // if it is ever used, the channel (0x00) provided here should be replaced with the channel strip number (0x00...0x07) after calling this method
         
         return (0x00, port)
@@ -67,14 +67,14 @@ extension MIDI.HUI.Parameter.ChannelParameter: CustomStringConvertible {
         
         // Zones 0x00 - 0x07
         // Channel Strips
-        case .faderTouched:  return ".faderTouched"
-        case .select:        return ".select"
-        case .mute:          return ".mute"
-        case .solo:          return ".solo"
-        case .auto:          return ".auto"
-        case .vPotSelect:    return ".vPotSelect"
-        case .insert:        return ".insert"
-        case .recordReady:   return ".recordReady"
+        case .faderTouched:  return "faderTouched"
+        case .select:        return "select"
+        case .mute:          return "mute"
+        case .solo:          return "solo"
+        case .auto:          return "auto"
+        case .vPotSelect:    return "vPotSelect"
+        case .insert:        return "insert"
+        case .recordReady:   return "recordReady"
             
         }
         

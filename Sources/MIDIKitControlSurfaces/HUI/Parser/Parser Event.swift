@@ -17,7 +17,7 @@ extension MIDI.HUI.Parser {
         case faderLevel(channelStrip: Int,
                         level: MIDI.UInt14)
         
-        case vPot(channelStrip: Int,
+        case vPot(number: Int,
                   value: MIDI.UInt7)
         
         case largeDisplayText(components: [String])
@@ -44,38 +44,38 @@ extension MIDI.HUI.Parser.Event: CustomStringConvertible {
         switch self {
         
         case .pingReceived:
-            return ".pingReceived"
+            return "pingReceived"
         
         case .levelMeters(channelStrip: let channelStrip,
                           side: let side,
                           level: let level):
-            return ".levelMeters(channelStrip: \(channelStrip), side: \(side), level: \(level))"
+            return "levelMeters(channelStrip: \(channelStrip), side: \(side), level: \(level))"
             
         case .faderLevel(channelStrip: let channelStrip,
                          level: let level):
-            return ".faderLevel(channelStrip: \(channelStrip), level: \(level))"
+            return "faderLevel(channelStrip: \(channelStrip), level: \(level))"
             
-        case .vPot(channelStrip: let channelStrip,
+        case .vPot(number: let channelStrip,
                    value: let value):
-            return ".vPot(channelStrip: \(channelStrip), value: \(value))"
+            return "vPot(number: \(channelStrip), value: \(value))"
             
         case .largeDisplayText(components: let components):
-            return ".largeDisplayText(components: \(components))"
+            return "largeDisplayText(components: \(components))"
             
         case .timeDisplayText(components: let components):
-            return ".timeDisplayText(components: \(components))"
+            return "timeDisplayText(components: \(components))"
             
         case .selectAssignText(text: let text):
-            return ".selectAssignText(text: \(text))"
+            return "selectAssignText(text: \(text))"
             
         case .channelName(channelStrip: let channelStrip,
                           text: let text):
-            return ".channelName(channelStrip: \(channelStrip), text: \(text))"
+            return "channelName(channelStrip: \(channelStrip), text: \(text))"
             
         case .switch(zone: let zone,
                      port: let port,
                      state: let state):
-            return ".switch(zone: \(zone), port: \(port), state: \(state ? "on" : "off"))"
+            return "switch(zone: \(zone), port: \(port), state: \(state ? "on" : "off"))"
             
         }
         
