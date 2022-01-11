@@ -73,7 +73,7 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
         }
         
         switch event {
-        case .sysEx(let payload):
+        case .sysEx7(let payload):
             guard payload.manufacturer == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
             parse(sysExContent: payload.data)
             
