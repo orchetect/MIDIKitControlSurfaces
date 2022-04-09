@@ -5,6 +5,7 @@
 
 @_implementationOnly import SwiftRadix
 import Darwin
+import MIDIKit
 
 extension MIDI.HUI {
     
@@ -65,14 +66,26 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
     /// Process HUI MIDI message received from host
     public func midiIn(event: MIDI.Event) {
         
-        // HUI ping-reply
-        if event == MIDI.HUI.kMIDI.kPingFromHostMessage {
-            // handler should send ping-reply to host
-            huiEventHandler?(.pingReceived)
-            return
-        }
-        
         switch event {
+        case .noteOn(let payload) where
+            payload.note == 0 &&
+            payload.velocity.midi1Value == 0:
+            
+            // handler should send HUI ping-reply to host
+            huiEventHandler?(.pingReceived)
+            
+        case .noteOff(let payload) where
+            payload.note == 0 &&
+            [0, 0x8000].contains(payload.velocity.midi2Value):
+            
+            // MIDI 2.0 translation from MIDI 1.0 at the Core MIDI subsystem level
+            // will force MIDI 1.0 Note On events with a velocity of 0 to be a MIDI 2.0 Note Off event.
+            // Technically the MIDI 2.0 spec states that the velocity should be 0,
+            // however it seems Core MIDI wants to send a 16-bit midpoint value of 0x8000 instead
+            
+            // handler should send HUI ping-reply to host
+            huiEventHandler?(.pingReceived)
+            
         case .sysEx7(let payload):
             guard payload.manufacturer == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
             parse(sysExContent: payload.data)

@@ -12,11 +12,6 @@ extension MIDI.HUI {
         // MARK: System messages
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
-        // [0x90, 0x00, 0x00]
-        public static let kPingFromHostMessage: MIDI.Event =
-            .noteOn(0, velocity: .midi1(0), channel: 0, midi1ZeroVelocityAsNoteOff: false)
-        
-        // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         // [0x90, 0x00, 0x7F]
         public static let kPingReplyToHostMessage: MIDI.Event =
             .noteOn(0, velocity: .midi1(0x7F), channel: 0)
