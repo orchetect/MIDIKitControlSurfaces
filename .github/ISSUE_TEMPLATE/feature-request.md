@@ -7,5 +7,9 @@ assignees: ''
 
 ---
 
-Please review the MIDIKit Wiki prior to submitting issues:
+Please review the MIDIKit Wiki and MIDIKitControlSurfaces Wiki prior to submitting issues:
 https://github.com/orchetect/MIDIKit/wiki
+https://github.com/orchetect/MIDIKitControlSurfaces/wiki
+
+Feature requests are best to be posted in the Discussions area first:
+https://github.com/orchetect/MIDIKitControlSurfaces/discussions
