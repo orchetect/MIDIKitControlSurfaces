@@ -68,14 +68,14 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
         
         switch event {
         case .noteOn(let payload) where
-            payload.note == 0 &&
+            payload.note.number == 0 &&
             payload.velocity.midi1Value == 0:
             
             // handler should send HUI ping-reply to host
             huiEventHandler?(.pingReceived)
             
         case .noteOff(let payload) where
-            payload.note == 0 &&
+            payload.note.number == 0 &&
             [0, 0x8000].contains(payload.velocity.midi2Value):
             
             // MIDI 2.0 translation from MIDI 1.0 at the Core MIDI subsystem level
@@ -222,7 +222,7 @@ extension MIDI.HUI.Parser {
     
     private func parse(controlStatusMessage event: MIDI.Event) {
         
-        let data = event.midi1RawBytes
+        let data = event.midi1RawBytes()
         
         guard data.count >= 3 else { return }
         
@@ -336,11 +336,11 @@ extension MIDI.HUI.Parser {
     
     private func parse(levelMetersMessage event: MIDI.Event) {
         
-        let data = event.midi1RawBytes
+        let data = event.midi1RawBytes()
         
         guard data.count >= 3 else { return }
         
-        guard data[ 0] == MIDI.HUI.kMIDI.kLevelMetersStatus else { return }
+        guard data[0] == MIDI.HUI.kMIDI.kLevelMetersStatus else { return }
         
         let dataByte1 = data[1]
         let dataByte2 = data[2]
