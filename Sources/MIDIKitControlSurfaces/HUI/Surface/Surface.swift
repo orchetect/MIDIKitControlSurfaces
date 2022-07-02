@@ -15,7 +15,7 @@ extension MIDI.HUI {
         public internal(set) var state: State
         {
             willSet {
-                if #available(macOS 10.15, macCatalyst 13, iOS 13, *) {
+                if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
                     objectWillChange.send()
                 }
             }
@@ -105,7 +105,7 @@ extension MIDI.HUI.Surface: SendsMIDIEvents {
 #if canImport(Combine)
 import Combine
 
-@available(macOS 10.15, macCatalyst 13, iOS 13, *)
+@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *)
 extension MIDI.HUI.Surface: ObservableObject {
     // nothing here; just add ObservableObject conformance
 }
