@@ -3,7 +3,7 @@
 //  MIDIKitControlSurfaces • https://github.com/orchetect/MIDIKitControlSurfaces
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 @testable import MIDIKitControlSurfaces

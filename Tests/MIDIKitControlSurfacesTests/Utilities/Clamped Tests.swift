@@ -13,7 +13,7 @@
 
 
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 @testable import MIDIKitControlSurfaces
@@ -73,4 +73,5 @@ class Utilities_ClampedTests: XCTestCase {
     }
     
 }
+
 #endif

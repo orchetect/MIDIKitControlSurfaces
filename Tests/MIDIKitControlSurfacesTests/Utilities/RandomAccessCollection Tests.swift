@@ -5,7 +5,7 @@
 
 import Foundation
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 @testable import MIDIKitControlSurfaces
